@@ -1,0 +1,34 @@
+@model List<ProductDTO>
+@{
+    var random = new Random();
+    var randomImage = random.Next(0, Model.Count);
+    var usedIndices = new HashSet<int> { randomImage };
+}
+
+<!-- Refined Featured Products Section -->
+<section class="py-5 bg-white">
+    <div class="container py-5">
+        <!-- Supporting Products Grid -->
+        <div class="row g-4">
+            @for (int i = 0; i < 4; i++)
+            {
+                int imageNumber;
+                do
+                {
+                    imageNumber = random.Next(0, Model.Count);
+                } while (usedIndices.Contains(imageNumber));
+                usedIndices.Add(imageNumber);
+
+                <div class="col-6 col-md-3">
+                    <div class="card shadow-sm border-0 h-100">
+                        <img src="@(Model[imageNumber].ImageSrc)" class="card-img-top rounded" alt="Craft @(Model[imageNumber].Name)">
+                        <div class="card-body text-center">
+                            <h5 class="card-title fw-bold mb-3">@Model[imageNumber].Name</h5>
+                            <a href="/Work/Index" class="btn btn-outline-dark btn-sm">View Product</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>

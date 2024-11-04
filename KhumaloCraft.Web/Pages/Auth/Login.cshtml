@@ -1,0 +1,44 @@
+﻿@page
+@model KhumaloCraft.Pages.Auth.LoginModel
+@{
+  ViewData["Title"] = "Login";
+}
+
+<div class="login">
+  <div class="container mt-5">
+    <div class="row justify-content-center">
+      <div class="col-lg-6 col-md-8">
+        <h2 class="text-center mb-4">Login</h2>
+
+        <form method="post" class="p-4 bg-light border rounded shadow-sm">
+          <div class="form-group mb-3">
+            <label asp-for="LoginDTO.Email" class="form-label">Email</label>
+            <input asp-for="LoginDTO.Email" class="form-control" />
+            <span asp-validation-for="LoginDTO.Email" class="text-danger"></span>
+          </div>
+
+          <div class="form-group mb-4">
+            <label asp-for="LoginDTO.Password" class="form-label">Password</label>
+            <input asp-for="LoginDTO.Password" class="form-control" type="password" />
+            <span asp-validation-for="LoginDTO.Password" class="text-danger"></span>
+          </div>
+
+          <button type="submit" class="btn btn-primary w-100">Login</button>
+
+          @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+          {
+            <div class="alert alert-danger mt-3">@Model.ErrorMessage</div>
+          }
+
+          <div class="d-flex justify-content-between mt-3">
+            <a asp-page="/Auth/Register" class="btn-link">Register</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+@section Scripts {
+  <partial name="_ValidationScriptsPartial" />
+}

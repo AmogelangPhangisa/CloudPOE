@@ -1,0 +1,30 @@
+﻿@page "{id:int}"
+@model KhumaloCraft.Web.Pages.Admin.Categories.EditModel
+@{
+}
+
+<div class="categories">
+  <div class="container mt-5">
+    <div class="row justify-content-center">
+      <div class="col-lg-6 col-md-8">
+        <div class="text-center mb-4">
+          <h2 class="fw-bold">Edit Category</h2>
+        </div>
+        <form method="post" class="p-4 bg-white border rounded-3 shadow-sm">
+          <input type="hidden" asp-for="Category.CategoryId" />
+
+          <div class="form-group mb-4">
+            <label for="CategoryName" class="form-label fw-semibold">Category Name</label>
+            <input asp-for="Category.CategoryName" class="form-control border-0 border-bottom" placeholder="Edit category name" />
+            <span asp-validation-for="Category.CategoryName" class="text-danger small"></span>
+          </div>
+
+          <div class="d-flex justify-content-between">
+            <button type="submit" class="btn btn-dark px-4 py-2">Save</button>
+            <a asp-page="/Admin/Categories/Index" class="btn btn-outline-secondary px-4 py-2">Cancel</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

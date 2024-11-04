@@ -1,0 +1,12 @@
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  padding-top: 86px;
+}
+
+.logo-img {
+  max-width: 60px;
+}

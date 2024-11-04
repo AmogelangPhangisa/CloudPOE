@@ -1,0 +1,68 @@
+@model IEnumerable<dynamic>
+
+<div class="bg-dark">
+    <div class="container">
+        <footer>
+            <div class="row py-5">
+                <div class="col-12 col-md-6 col-lg-3 mb-5 mb-lg-0 text-center text-md-start">
+                    <h5 class="text-white">Chat with us</h5>
+                    <div class="d-flex justify-content-center justify-content-md-start">
+                        <i class="text-white bi bi-telephone pe-2"></i>
+                        <p><a class="text-white text-decoration-none" href="tel:0212345678">(021) 234-5678</a></p>
+                    </div>
+
+                    <div class="d-flex justify-content-center justify-content-md-start">
+                        <i class="text-white bi bi-envelope pe-2"></i>
+                        <p><a class="text-white text-decoration-none text-wrap" href="mailto:sales@khumalocraftemporium.com">sales@khumalocraft.com</a></p>
+                    </div>
+
+                    <div class="d-flex justify-content-center justify-content-md-start">
+                        <i class="text-white bi bi-geo-alt-fill pe-2"></i>
+                        <p class="text-white text-decoration-none">
+                            301, Emporium road <br>
+                            Cape Town CBD <br>
+                            Western Cape <br>
+                            South Africa <br>
+                            8001
+                        </p>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-6 col-lg-3 mb-5 mb-lg-0 text-center text-md-start">
+                    <h5 class="text-white">Navigation</h5>
+                    <ul class="nav flex-column">
+                        @foreach (var item in Model)
+                        {
+                            <li class="nav flex-column">
+                                <a class="nav-item text-decoration-none text-white mb-2" asp-page="@item.Page">
+                                    @item.Text
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+
+                <div class="col-12 col-md-6 col-lg-3 mb-5 mb-lg-0 text-center text-md-start">
+                    <h5 class="text-white">Social</h5>
+                    <div class="d-flex gap-4 justify-content-center justify-content-md-start">
+                        <a href="#" class="text-white"><i class="fs-2 text-white bi bi-facebook"></i></a>
+                        <a href="#" class="text-white"><i class="fs-2 text-white bi bi-twitter"></i></a>
+                        <a href="#" class="text-white"><i class="fs-2 text-white bi bi-instagram"></i></a>
+                        <a href="#" class="text-white"><i class="fs-2 text-white bi bi-linkedin"></i></a>
+                    </div>
+                </div>
+
+                <div class="col-12 col-md-6 col-lg-3 mb-5 mb-lg-0 text-center text-md-start">
+                    <h5 class="text-white">KhumaloCraft Emporium</h5>
+                    <p class="text-white">
+                        Khumalo Craft celebrates the artistry of handcrafted creations, offering a unique collection of meticulously crafted pieces that blend traditional techniques with contemporary design.
+                    </p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <div class="border-top text-center py-2">
+        <span class="text-white">© 2024 Khumalo Craft Emporium, Inc. All rights reserved.</span>
+    </div>
+</div>

@@ -1,0 +1,70 @@
+@page
+@model KhumaloCraft.Web.Pages.Admin.Products.CreateModel
+@{
+}
+
+<div class="products">
+  <div class="container mt-5">
+    <div class="row justify-content-center">
+      <div class="col-lg-6 col-md-8">
+        <div class="text-center mb-4">
+          <h2 class="fw-bold">Create New Product</h2>
+        </div>
+
+        <form method="post" class="p-4 bg-light border rounded-3 shadow-sm">
+          <!-- Product Name -->
+          <div class="form-group mb-4">
+            <label asp-for="Product.Name" class="form-label fw-semibold">Product Name</label>
+            <input asp-for="Product.Name" class="form-control border-0 border-bottom" placeholder="Enter product name" />
+            <span asp-validation-for="Product.Name" class="text-danger small"></span>
+          </div>
+
+          <!-- Product Price -->
+          <div class="form-group mb-4">
+            <label asp-for="Product.Price" class="form-label fw-semibold">Product Price</label>
+            <input asp-for="Product.Price" class="form-control border-0 border-bottom" placeholder="Enter product price" />
+            <span asp-validation-for="Product.Price" class="text-danger small"></span>
+          </div>
+
+          <!-- Product Description -->
+          <div class="form-group mb-4">
+            <label asp-for="Product.Description" class="form-label fw-semibold">Product Description</label>
+            <textarea asp-for="Product.Description" class="form-control border-0 border-bottom" placeholder="Enter product description"></textarea>
+            <span asp-validation-for="Product.Description" class="text-danger small"></span>
+          </div>
+
+          <!-- Product Image -->
+          <div class="form-group mb-4">
+            <label asp-for="Product.ImageSrc" class="form-label fw-semibold">Product Image URL</label>
+            <input asp-for="Product.ImageSrc" class="form-control border-0 border-bottom" placeholder="Enter product image URL" />
+            <span asp-validation-for="Product.ImageSrc" class="text-danger small"></span>
+          </div>
+
+          <!-- Product Price -->
+          <div class="form-group mb-4">
+            <label asp-for="Product.Quantity" class="form-label fw-semibold">Product Quantity</label>
+            <input asp-for="Product.Quantity" type="number" class="form-control border-0 border-bottom" placeholder="Enter product price" />
+            <span asp-validation-for="Product.Quantity" class="text-danger small"></span>
+          </div>
+
+          <!-- Product Category -->
+          <div class="form-group mb-4">
+            <label asp-for="Product.CategoryId" class="form-label fw-semibold">Category</label>
+            <select asp-for="Product.CategoryId" class="form-control border-0 border-bottom" asp-items="@(new SelectList(Model.Categories, "CategoryId", "CategoryName"))">
+              <option value="">-- Select Category --</option>
+            </select>
+            <span asp-validation-for="Product.CategoryId" class="text-danger small"></span>
+          </div>
+
+          <!-- Form Buttons -->
+          <div class="d-flex justify-content-between">
+            <button type="submit" class="btn btn-dark px-4 py-2">Create</button>
+            <a asp-page="/Admin/Products/Index" class="btn btn-outline-secondary px-4 py-2">Cancel</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+
+</div>

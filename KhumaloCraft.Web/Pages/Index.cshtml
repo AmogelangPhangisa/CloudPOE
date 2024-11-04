@@ -1,0 +1,40 @@
+﻿@page
+@model IndexModel
+@{
+  ViewData["Title"] = "Home";
+}
+
+<div class="container-fluid p-0">
+  <section class="text-center py-5 bg-light">
+    <div class="container py-5">
+      <div class="row align-items-center justify-content-center text-center text-lg-start py-5">
+        <div class="col-lg-6 mb-5 mb-lg-0">
+          <h1 class="fs-1 fw-bold lh-1 mb-3">Handcrafted treasures<br> <span class="display-6">Inspired by Creativity</span></h1>
+          <p class="fs-5 mb-4">KhumaloCraft specializes in hand-crafted designs, celebrating the art of craftsmanship and the beauty of personalized creations.</p>
+          <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+            <a asp-page="/Work/Index">
+              <button type="button" class="btn btn-primary btn-lg px-4 fw-bold">Shop Now</button>
+            </a>
+          </div>
+        </div>
+
+        <div class="col-lg-6">
+          @await Html.PartialAsync("Shared/Components/_ProductItemSlider.cshtml", Model.ProductList)
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <div>
+    @await Html.PartialAsync("Shared/Components/_FeaturedItems.cshtml", Model.ProductList)
+  </div>
+
+  <div>
+    @await Html.PartialAsync("Shared/Components/_FeaturedInfo.cshtml")
+  </div>
+
+  <div>
+    @await Html.PartialAsync("Shared/Components/_InfoBanner.cshtml")
+  </div>
+</div>

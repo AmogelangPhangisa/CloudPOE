@@ -1,0 +1,43 @@
+version: '3.4'
+
+services:
+  # starts the frontend UI Service
+  khumalocraftweb:
+    image: khumalocraft-web
+    build:
+      context: .
+      dockerfile: KhumaloCraft.Web/Dockerfile
+    ports:
+      - "8085:8080"
+    environment:
+      ConnectionStrings__ApiHost: "http://khumalocraftapi:8080/"
+    depends_on:
+      - khumalocraftapi
+
+  # Starts the Backend API service
+  khumalocraftapi:
+    image: khumalocraft-api
+    build:
+      context: .
+      dockerfile: KhumaloCraft.BusinessAPI/Dockerfile
+    ports:
+      - "8086:8080"
+    environment:
+      ConnectionStrings__DefaultConnection: "Server=sqlserver;Database=KhumaloCraft;User Id=sa;Password=123!@#qweQWE;TrustServerCertificate=true;Connection Timeout=30;"
+    depends_on:
+      - sqlserver
+
+  # Starts the Database layer service
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server
+    environment:
+      SA_PASSWORD: "123!@#qweQWE"
+      ACCEPT_EULA: "Y"
+      MSSQL_PID: "Express"
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlserverdata:/var/opt/mssql
+
+volumes:
+  sqlserverdata:

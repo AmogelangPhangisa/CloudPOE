@@ -1,0 +1,76 @@
+﻿@page
+@model KhumaloCraft.Web.Pages.OrdersModel
+@using System.Globalization
+@{
+  var cultureInfo = new CultureInfo("en-ZA");
+  decimal vatRate = 0.15M; // VAT rate of 15%
+}
+
+<div class="container mt-5">
+  <h2 class="text-center mb-4">My Orders</h2>
+
+  @if (Model.Orders == null || Model.Orders.Count == 0)
+  {
+    <div class="alert alert-info text-center">You have no orders yet.</div>
+  }
+  else
+  {
+    @foreach (var order in Model.Orders)
+    {
+      // Calculate the subtotal for the order
+      var subtotal = order.Items.Sum(item => item.Price * item.Quantity);
+      var vatAmount = subtotal * vatRate; // Calculate VAT
+      var totalWithVat = subtotal + vatAmount; // Total including VAT
+
+      <!-- Order Card -->
+      <div class="card mb-4 shadow-sm">
+        <div class="card-body">
+          <!-- Order Summary with Total and VAT -->
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <h5 class="card-title mb-1"><strong>Order ID:</strong> @order.OrderId</h5>
+              <p class="text-muted mb-1"><strong>Order Date:</strong> @order.OrderDate</p>
+              <p class="mb-1"><strong>Subtotal:</strong> @subtotal.ToString("C", cultureInfo)</p>
+              <p class="mb-1"><strong>VAT (15%):</strong> @vatAmount.ToString("C", cultureInfo)</p>
+              <p class="mb-0"><strong>Total (Including VAT):</strong> @totalWithVat.ToString("C", cultureInfo)</p>
+            </div>
+            <div class="d-flex justify-content-between align-items-center mb-4">
+              <button class="me-2 btn btn-info" type="button" aria-expanded="false">
+                @order.StatusName
+              </button>
+
+              <button class="btn btn-outline-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#orderItems-@order.OrderId" aria-expanded="false">
+                View Items
+              </button>
+            </div>
+          </div>
+
+          <!-- Collapsible Order Items Section -->
+          <div class="collapse mt-3" id="orderItems-@order.OrderId">
+            <table class="table table-striped">
+              <thead class="table-dark">
+                <tr>
+                  <th>Product</th>
+                  <th>Quantity</th>
+                  <th>Price</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                @foreach (var item in order.Items)
+                {
+                  <tr>
+                    <td>@item.ProductName</td>
+                    <td>@item.Quantity</td>
+                    <td>@item.Price.ToString("C", cultureInfo)</td>
+                    <td>@((item.Price * item.Quantity).ToString("C", cultureInfo))</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    }
+  }
+</div>

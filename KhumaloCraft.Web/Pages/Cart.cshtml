@@ -1,0 +1,113 @@
+﻿@page
+@model KhumaloCraft.Web.Pages.CartModel
+@using System.Globalization
+@{
+  var cultureInfo = new CultureInfo("en-ZA");
+  decimal vatRate = 0.15M; // VAT rate of 15%
+  decimal subtotal = Model.Cart?.Items.Sum(i => i.Price * i.Quantity) ?? 0; // Calculate subtotal
+  decimal vatAmount = subtotal * vatRate; // Calculate VAT
+  decimal totalWithVat = subtotal + vatAmount; // Total including VAT
+}
+<div class="cart">
+  <div class="container mt-5">
+    <h1 class="display-4 text-center mb-4">Shopping Cart</h1>
+    <p class="text-center">Review your items and proceed to checkout when you're ready.</p>
+
+    @if (Model.Cart?.Items == null || Model.Cart.Items.Count == 0)
+    {
+      <div class="alert alert-info text-center mt-5">Your cart is currently empty.</div>
+    }
+    else
+    {
+      <!-- Cart Items Table -->
+      <div class="table-responsive mt-4">
+        <table class="table table-striped table-hover">
+          <thead class="table-dark">
+            <tr>
+              <th scope="col">Product</th>
+              <th scope="col">Price</th>
+              <th scope="col">Quantity</th>
+              <th scope="col">Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            @foreach (var item in Model.Cart.Items)
+            {
+              <tr>
+                <td>@item.ProductName</td>
+                <td>@item.Price.ToString("C", cultureInfo)</td>
+                <td>@item.Quantity</td>
+                <td>@((item.Price * item.Quantity).ToString("C", cultureInfo))</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Price Breakdown -->
+      <div class="row mt-5">
+        <div class="col-md-6 offset-md-6">
+          <div class="d-flex justify-content-between">
+            <h5>Subtotal:</h5>
+            <h5>@subtotal.ToString("C", cultureInfo)</h5>
+          </div>
+          <div class="d-flex justify-content-between">
+            <h5>VAT (15%):</h5>
+            <h5>@vatAmount.ToString("C", cultureInfo)</h5>
+          </div>
+          <div class="d-flex justify-content-between">
+            <h4><strong>Total (Including VAT):</strong></h4>
+            <h4><strong>@totalWithVat.ToString("C", cultureInfo)</strong></h4>
+          </div>
+        </div>
+      </div>
+
+      <!-- Place Order Button -->
+      <div class="d-flex justify-content-end mt-4">
+        @if (User.Identity.IsAuthenticated)
+        {
+          <form class="me-2" method="post" asp-page-handler="EmptyCheckoutCart">
+            <input type="hidden" name="cartId" value="@Model.Cart.CartId" />
+            <button type="submit" class="btn btn-secondary btn-lg fw-bold px-5 py-2">
+              Empty Cart
+            </button>
+          </form>
+
+          <form method="post" asp-page-handler="CheckoutCart" onsubmit="toggleSpinner(true)">
+            <input type="hidden" name="cartId" value="@Model.Cart.CartId" />
+            <button type="submit" class="btn btn-success btn-lg fw-bold px-5 py-2" id="checkoutButton">
+              <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true" id="spinner" style="display: none;"></span>
+              Place Order
+            </button>
+          </form>
+        }
+        else
+        {
+          <a href="/Auth/Login" class="btn btn-primary btn-lg fw-bold px-5 py-2">Log in to Place Order</a>
+        }
+      </div>
+    }
+  </div>
+</div>
+
+<script>
+  function toggleSpinner(isSubmitting) {
+    const button = document.getElementById("checkoutButton");
+    const spinner = document.getElementById("spinner");
+
+    if (spinner) {
+      if (isSubmitting) {
+        spinner.style.display = 'inline-block';
+        button.disabled = true;
+      } else {
+        spinner.style.display = 'none';
+        button.disabled = false;
+      }
+    }
+  }
+
+  // Reset spinner if a page refresh happens on error or success response
+  window.addEventListener('DOMContentLoaded', () => {
+    toggleSpinner(false);
+  });
+</script>

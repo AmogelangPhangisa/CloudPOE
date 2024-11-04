@@ -1,0 +1,25 @@
+@model List<ProductDTO>
+
+<div id="product-item-slider" class="carousel slide">
+  <div class="carousel-inner">
+    @for (var i = 0; i < Model.Count; i++)
+    {
+      var product = Model[i];
+      <div class="carousel-item @(i == 0 ? "active" : "")">
+        <div class="d-flex justify-content-center">
+          <img width="300" src="@product.ImageSrc" class="d-block" alt="product - @product.Name">
+        </div>
+      </div>
+    }
+  </div>
+
+  <button class="carousel-control-prev" type="button" data-bs-target="#product-item-slider" data-bs-slide="prev">
+    <span><i class="text-primary fs-1 bi bi-chevron-compact-left" aria-hidden="true"></i></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+
+  <button class="carousel-control-next" type="button" data-bs-target="#product-item-slider" data-bs-slide="next">
+    <span><i class="text-primary fs-1 bi bi-chevron-compact-right" aria-hidden="true"></i></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+</div>

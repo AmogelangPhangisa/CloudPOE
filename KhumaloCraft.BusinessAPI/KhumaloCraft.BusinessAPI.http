@@ -1,0 +1,6 @@
+@KhumaloCraft.BusinessAPI_HostAddress = http://localhost:5068
+
+GET {{KhumaloCraft.BusinessAPI_HostAddress}}/api/products/
+Accept: application/json
+
+###

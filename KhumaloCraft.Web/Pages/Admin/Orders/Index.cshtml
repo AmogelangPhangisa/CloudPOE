@@ -1,0 +1,143 @@
+@page
+@model KhumaloCraft.Web.Pages.Admin.Orders.IndexModel
+@using System.Globalization
+@{
+  var cultureInfo = new CultureInfo("en-ZA");
+  decimal vatRate = 0.15M; // VAT rate of 15%
+}
+
+<div class="container mt-5">
+  <h2 class="text-center mb-4">All Orders</h2>
+
+  @if (Model.Orders == null || Model.Orders.Count == 0)
+  {
+    <div class="alert alert-info text-center">No orders found.</div>
+  }
+  else
+  {
+    @foreach (var order in Model.Orders)
+    {
+      // Calculate the subtotal for the order
+      var subtotal = order.Items.Sum(item => item.Price * item.Quantity);
+      var vatAmount = subtotal * vatRate; // Calculate VAT
+      var totalWithVat = subtotal + vatAmount; // Total including VAT
+
+      <!-- Order Card -->
+      <div class="card mb-4 shadow-sm">
+        <div class="card-body">
+          <!-- Order Summary with Total and VAT -->
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <div>
+              <!-- Order ID and Details -->
+              <h5 class="card-title mb-1">
+                <strong>Order ID:</strong> @order.OrderId
+              </h5>
+
+              <!-- Order Date -->
+              <p class="text-muted mb-1">
+                <strong>Order Date:</strong> @order.OrderDate
+              </p>
+
+              <!-- User -->
+              <p class="text-muted mb-1">
+                <strong>Ordered By:</strong>
+                <a href="#">
+                  @order.User?.FirstName @order.User?.LastName
+                </a>
+              </p>
+
+              <!-- Subtotal, VAT, and Total -->
+              <p class="mb-1"><strong>Subtotal:</strong> @subtotal.ToString("C", cultureInfo)</p>
+              <p class="mb-1"><strong>VAT (15%):</strong> @vatAmount.ToString("C", cultureInfo)</p>
+              <p class="mb-0"><strong>Total (Including VAT):</strong> @totalWithVat.ToString("C", cultureInfo)</p>
+            </div>
+
+            <!-- Toggle Button for Collapsible Order Items -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+              <!-- Order Status -->
+              <form method="post" asp-page-handler="UpdateStatus" id="statusForm-@order.OrderId">
+                <div class="form-group mb-0 flex-grow-1 me-3">
+                  <!-- Dropdown for StatusId -->
+                  <select name="statusId" class="form-control border-2 border-bottom" onchange="submitForm('@order.OrderId')">
+                    <option value="">-- Select Status --</option>
+                    @foreach (var status in Model.StatusList)
+                    {
+                      // Use conditional rendering for the selected attribute
+                      if (status.StatusId == order.StatusId)
+                      {
+                        <option value="@status.StatusId" selected>@status.StatusName</option>
+                      }
+                      else
+                      {
+                        <option value="@status.StatusId">@status.StatusName</option>
+                      }
+                    }
+                  </select>
+                  <!-- Validation message for StatusId -->
+                  <span asp-validation-for="@order.StatusId" class="text-danger small"></span>
+                </div>
+
+                <!-- Hidden field to pass the orderId -->
+                <input type="hidden" name="orderId" value="@order.OrderId" />
+              </form>
+
+
+              <!-- View Items Button -->
+              <button class="btn btn-outline-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#orderItems-@order.OrderId" aria-expanded="false">
+                View Items
+              </button>
+            </div>
+          </div>
+
+          <!-- Collapsible Order Items Section -->
+          <div class="collapse mt-3" id="orderItems-@order.OrderId">
+            <table class="table table-striped table-hover">
+              <thead class="table-dark">
+                <tr>
+                  <th>Product</th>
+                  <th>Quantity</th>
+                  <th>Price</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                @foreach (var item in order.Items)
+                {
+                  <tr>
+                    <td>@item.ProductName</td>
+                    <td>@item.Quantity</td>
+                    <td>@item.Price.ToString("C", cultureInfo)</td>
+                    <td>@((item.Price * item.Quantity).ToString("C", cultureInfo))</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    }
+  }
+</div>
+
+<script>
+  async function submitForm(orderId) {
+    const token = document.querySelector('input[name="__RequestVerificationToken"]').value;
+    const statusId = document.querySelector(`#statusForm-${orderId} select[name="statusId"]`).value;
+
+    // Prepare the payload
+    const payload = { orderId: parseInt(orderId), statusId: parseInt(statusId) };
+
+    try {
+      const response = await fetch(`/Admin/Orders/Index?handler=UpdateStatus`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "RequestVerificationToken": token
+        },
+        body: JSON.stringify(payload)
+      });
+    } catch (error) {
+      console.error("Error in updating status:", error);
+    }
+  }
+</script>
